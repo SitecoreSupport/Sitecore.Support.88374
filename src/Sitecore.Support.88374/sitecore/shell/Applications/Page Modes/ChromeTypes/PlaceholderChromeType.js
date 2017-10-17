@@ -336,15 +336,8 @@
     },
 
     isEmpty: function () {
-        return this.chrome.element.length === 0 || this.chrome.element.hasClass(Sitecore.PageModes.ChromeTypes.Placeholder.emptyLookFillerCssClass)
-            || this.isOnlyElementEmpty();
-    },
-
-    // extra check due to the EE 88374 bug
-    isOnlyElementEmpty: function () {
-        return this.chrome.element.length === 1 && this.chrome.element[0].innerText === "" && this.chrome.element[0].attributes
-            && this.chrome.element[0].attributes["sc-part-of"] && this.chrome.element[0].attributes["sc-part-of"].value === "placeholder rendering"
-            && this.chrome.element[0].attributes["style"] && (this.chrome.element[0].attributes["style"].value.indexOf("display: none") >= 0 || this.chrome.element[0].attributes["style"].value.indexOf("display:none") >= 0);
+        return this.chrome.element.length === 0 ||
+            this.chrome.element.hasClass(Sitecore.PageModes.ChromeTypes.Placeholder.emptyLookFillerCssClass);
     },
 
     isEnabled: function () {
