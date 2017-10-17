@@ -102,7 +102,11 @@
 
         var l = chrome.element.length;
         chrome.element.fadeOut(200, $sc.proxy(function () {
-            if (--l > 0) return;
+            // Sitecore.Support.88347
+            //if (--l > 0) return;
+            l = l - 1;
+            if (l > 0) return;
+            //
             this._removeRendering(chrome);
             if (this.isEmpty()) {
                 this.showEmptyLook();
@@ -335,10 +339,21 @@
         });
     },
 
-    isEmpty: function () {
+    // Sitecore.Support.88347
+    /*isEmpty: function () {
         return this.chrome.element.length === 0 ||
             this.chrome.element.hasClass(Sitecore.PageModes.ChromeTypes.Placeholder.emptyLookFillerCssClass);
+    },*/
+    isEmpty: function () {
+        return this.chrome.element.length === 0 || this.chrome.element.hasClass(Sitecore.PageModes.ChromeTypes.Placeholder.emptyLookFillerCssClass)
+            || this.isOnlyElementEmpty();
     },
+    isOnlyElementEmpty: function () {
+        return this.chrome.element.length === 1 && this.chrome.element[0].innerText === "" && this.chrome.element[0].attributes
+            && this.chrome.element[0].attributes["sc-part-of"] && this.chrome.element[0].attributes["sc-part-of"].value === "placeholder rendering"
+            && this.chrome.element[0].style.display === "none";
+    },
+    //
 
     isEnabled: function () {
         return this.base() &&

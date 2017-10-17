@@ -473,13 +473,19 @@
         this.triggerEvent("scroll");
         this.hideMoreCommands();
         this.hideAncestors();
-        var fixedPosition = this.positioningManager.getFixedChromeRelativeElementPosition(this.dimensions == null ? this.toolbar.getDimensions() : this.dimensions, this.chrome);
+        // Sitecore.Support.88347
+        //var fixedPosition = this.positioningManager.getFixedChromeRelativeElementPosition(this.dimensions == null ? this.toolbar.getDimensions() : this.dimensions, this.chrome);
+        var fixedPosition = this.positioningManager.getFixedChromeRelativeElementPosition(this.dimensions == null ? { height: this.toolbar.outerHeight(), width: this.toolbar.outerWidth() } : this.dimensions, this.chrome);
+        //
         this.toolbar.css({ left: fixedPosition.left + 'px', top: fixedPosition.top + 'px' });
     },
 
     show: function (chrome, duration) {
         if (this.chrome != chrome) {
             this.chrome = chrome;
+            // Sitecore.Support.88347
+            Sitecore.PageModes.ChromeManager.select(chrome);
+            //
             this.updateCommands();
             this.dummy.update(this.toolbar.get(0).innerHTML);
             this.dimensions = { height: this.dummy.outerHeight(), width: this.dummy.outerWidth() };
